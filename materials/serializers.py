@@ -15,6 +15,7 @@ class CourseSerializer(ModelSerializer):
 
 
 class CourseDetailSerializer(ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True, source='lesson_set')
     lesson_count = SerializerMethodField()
 
 
@@ -23,4 +24,4 @@ class CourseDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ("title", "preview", "description", "lesson_count")
+        fields = ("title", "preview", "description", "lesson_count", "lessons")
