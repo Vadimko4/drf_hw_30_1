@@ -1,0 +1,78 @@
+[
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$4ALuxg4MwyVboc2a7LYrrw$22KS8sqpMDrS5iDpnTJRD9EqlcPJvPdWycRxqoQ8v8s=",
+        "last_login": "2025-10-02T10:01:04.289Z",
+        "is_superuser": true,
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-10-02T09:59:19.600Z",
+        "email": "vad.informat@yandex.ru",
+        "phone": null,
+        "town": null,
+        "avatar": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+        "password": "7rhfcysq7",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "Вадим",
+        "last_name": "Кочергин",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-10-02T10:16:06Z",
+        "email": "lr.vadim@yandex.ru",
+        "phone": "+7",
+        "town": null,
+        "avatar": "",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "users.payment",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "course": 1,
+        "lesson": 1,
+        "date": "2025-10-02",
+        "amount": 3500,
+        "type": "cash"
+    }
+},
+{
+    "model": "users.payment",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "course": 1,
+        "lesson": 4,
+        "date": "2025-10-01",
+        "amount": 5000,
+        "type": "cash"
+    }
+},
+{
+    "model": "users.payment",
+    "pk": 3,
+    "fields": {
+        "user": 1,
+        "course": 3,
+        "lesson": 6,
+        "date": "2025-09-01",
+        "amount": 100000,
+        "type": "transaction"
+    }
+}
+]
