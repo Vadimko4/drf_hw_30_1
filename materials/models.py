@@ -7,6 +7,8 @@ class Course(models.Model):
                                help_text="Загрузите превью курса")
     description = models.TextField(blank=True, null=True, verbose_name='Описание курса',
                                    help_text='Введите описание курса')
+    owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
+                              help_text="Укажите владельца")
 
     class Meta:
         verbose_name = "Курс"
@@ -26,6 +28,8 @@ class Lesson(models.Model):
                                    help_text='Введите ссылку на видео урока')
     course = models.ForeignKey('Course', on_delete=models.SET_NULL, verbose_name='Курс',
                         help_text='Введите курс', blank=True, null=True)
+    owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
+                              help_text="Укажите владельца")
 
     class Meta:
         verbose_name = "Урок"
