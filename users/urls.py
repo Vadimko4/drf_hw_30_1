@@ -10,7 +10,6 @@ from users.views import UserCreateAPIView
 
 app_name = UsersConfig.name
 
-
 router = SimpleRouter()
 router.register("payments", PaymentViewSet)
 
