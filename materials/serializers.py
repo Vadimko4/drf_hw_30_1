@@ -1,9 +1,14 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from materials.models import Course, Lesson
+from materials.validators import validate_external_links
 
 
 # Базовый сериализатор урока (полная версия)
 class LessonSerializer(ModelSerializer):
+    title = serializers.CharField(validators=[validate_external_links])
+    description = serializers.CharField(validators=[validate_external_links])
+
     class Meta:
         model = Lesson
         fields = "__all__"
@@ -18,6 +23,9 @@ class LessonInCourseSerializer(ModelSerializer):
 
 
 class CourseSerializer(ModelSerializer):
+    title = serializers.CharField(validators=[validate_external_links])
+    description = serializers.CharField(validators=[validate_external_links])
+
     class Meta:
         model = Course
         fields = "__all__"
