@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from materials.models import Course, Lesson
+from materials.models import Course, Lesson, Subscription
 from users.models import User
 
 
@@ -14,7 +14,8 @@ class LessonTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create(email="vadim@sky.pro")
         self.course = Course.objects.create(title="New Course", description="Очень интересный курс")
-        self.lesson = Lesson.objects.create(title="new lesson", course=self.course, owner=self.user)
+        self.lesson = Lesson.objects.create(title="new lesson", description="какой-то урок", course=self.course,
+                                            owner=self.user)
         self.client.force_authenticate(user=self.user)
 
     def test_lesson_retrieve(self):
@@ -92,4 +93,16 @@ class LessonTestCase(APITestCase):
         )
         self.assertEqual(
             data, result
+        )
+
+    def test_unsubscribe(self):
+        Subscription.objects.create(user=self.user, course=self.course)
+
+        self.client.force_authenticate(user=self.user)
+        url = reverse("materials:subscribe")
+        response = self.client.post(url, {"course_id": self.course.pk})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["message"], "Подписка удалена")
+        self.assertFalse(
+            Subscription.objects.filter(user=self.user, course=self.course).exists()
         )
