@@ -11,11 +11,11 @@ class User(AbstractUser):
     phone = models.CharField(max_length=35, verbose_name="Телефон", blank=True, null=True,
                              help_text="Введите номер телефона")
     town = models.CharField(max_length=50, verbose_name="Город", blank=True, null=True,
-                               help_text="Введите город")
+                            help_text="Введите город")
     avatar = models.ImageField(upload_to="users/avatars/", verbose_name="Аватар", blank=True, null=True,
                                help_text="Загрузите свой аватар")
 
-    USERNAME_FIELD = "email" # меняем юзернейм на почту
+    USERNAME_FIELD = "email"  # меняем юзернейм на почту
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -37,9 +37,9 @@ class Payment(models.Model):
     user = models.ForeignKey(User, verbose_name='Плательщик', help_text='Укажите плательщика',
                              on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс',
-                        help_text='Укажите курс')
+                               help_text='Укажите курс')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='Оплаченный урок',
-                        help_text='Укажите оплаченный урок')
+                               help_text='Укажите оплаченный урок')
     date = models.DateField(verbose_name='Дата оплаты', help_text='Введите дату оплаты')
     amount = models.PositiveIntegerField(verbose_name='Сумма оплаты', help_text='Введите сумму оплаты')
     type = models.CharField(max_length=12, choices=PAYMENT_TYPE)
