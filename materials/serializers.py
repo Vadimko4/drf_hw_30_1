@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from materials.models import Course, Lesson, Subscription
 from materials.validators import validate_external_links
+from users.models import Payment
 
 
 # Базовый сериализатор урока (полная версия)
