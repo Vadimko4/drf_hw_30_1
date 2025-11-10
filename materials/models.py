@@ -9,6 +9,13 @@ class Course(models.Model):
                                    help_text='Введите описание курса')
     owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
                               help_text="Укажите владельца")
+    stripe_product_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Stripe Product ID',
+        help_text='ID продукта в Stripe'
+    )
 
     class Meta:
         verbose_name = "Курс"
@@ -30,6 +37,13 @@ class Lesson(models.Model):
                         help_text='Введите курс', blank=True, null=True)
     owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
                               help_text="Укажите владельца")
+    stripe_product_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='Stripe Product ID',
+        help_text='ID продукта в Stripe'
+    )
 
     class Meta:
         verbose_name = "Урок"
