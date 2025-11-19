@@ -21,6 +21,7 @@ drf-yasg = "^1.21.11"
 stripe = "^13.1.1"
 forex-python = "^1.9.2"
 celery = "^5.5.3"
+redis = "^7.1.0"
 
 
 [tool.poetry.group.lint.dependencies]
