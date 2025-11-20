@@ -1,35 +1,40 @@
 from celery import shared_task
 from django.utils import timezone
 
-# from config.settings import EMAIL_HOST_USER
+from config.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 
 # from dogs.services import send_telegram_message
 from users.models import User
+from .models import Course, Subscription
 
 
 @shared_task
-def send_information_about_like(email):
-    """Отправляет хозяину собаки письмо, когда собаке ставят лайк"""
-    # message = 'Вашей собаке поставили лайк'
-    # send_mail('Новый лайк!', message, EMAIL_HOST_USER, [email])
-    # user = User.objects.get(email=email)
-    # if user.tg_chat_id:
-    #     # print(user.tg_chat_id, message)
-    #     send_telegram_message(user.tg_chat_id, message)
-    pass
+def send_information_about_course_update(course_id):
+    """Отправляет подписчикам письмо, когда курс обновляется"""
+    try:
+        course = Course.objects.get(id=course_id)
+        subscriptions = Subscription.objects.filter(course=course)
 
+        # Получаем список email подписанных пользователей
+        subscriber_emails = subscriptions.values_list('user__email', flat=True)
 
-@shared_task
-def send_email_about_birthday():
-    # today = timezone.now().date()
-    # dogs = Dog.objects.filter(owner__isnull=False, date_born=today)
-    # message = 'Поздравляем вашу собаку с Днём Рождения!'
-    # email_list = []
-    # for dog in dogs:
-    #     email_list.append(dog.owner.email)
-    #     if dog.owner.tg_chat_id:
-    #         send_telegram_message(dog.owner.tg_chat_id, message)
-    # if email_list:
-    #     send_mail('Поздравление', message, EMAIL_HOST_USER, email_list)
-    pass
+        # Формируем и отправляем письмо каждому подписчику
+        subject = f'Обновление курса "{course.title}"'
+        message = f'Курс "{course.title}" был обновлен. Проверьте новые материалы!'
+
+        for email in subscriber_emails:
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+        return f"Уведомления отправлены {len(subscriber_emails)} подписчикам курса '{course.title}'"
+
+    except Course.DoesNotExist:
+        return "Курс не найден"
+    except Exception as e:
+        return f"Ошибка при отправке уведомлений: {str(e)}"

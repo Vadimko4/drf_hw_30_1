@@ -8,6 +8,7 @@ from materials.models import Lesson, Course, Subscription
 from materials.paginations import CustomPagination
 from materials.serializers import LessonSerializer, CourseSerializer, CourseDetailSerializer
 from users.permissions import IsModer, IsOwner
+from materials.tasks import send_information_about_course_update
 
 
 class CourseViewSet(ModelViewSet):
@@ -41,6 +42,28 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        # Если обновление прошло успешно (статус 200)
+        if response.status_code == 200:
+            course_id = self.get_object().id
+            # Вызываем асинхронную задачу для отправки уведомлений
+            send_information_about_course_update.delay(course_id)
+
+        return response
+
+    def partial_update(self, request, *args, **kwargs):
+        response = super().partial_update(request, *args, **kwargs)
+
+        # Если частичное обновление прошло успешно (статус 200)
+        if response.status_code == 200:
+            course_id = self.get_object().id
+            # Вызываем асинхронную задачу для отправки уведомлений
+            send_information_about_course_update.delay(course_id)
+
+        return response
 
 
 class LessonCreateApiView(CreateAPIView):
