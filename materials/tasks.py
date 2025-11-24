@@ -38,3 +38,16 @@ def send_information_about_course_update(course_id):
         return "Курс не найден"
     except Exception as e:
         return f"Ошибка при отправке уведомлений: {str(e)}"
+
+
+@shared_task
+def block_inactive_users():
+    today = timezone.now().date()
+    users = User.objects.filter(is_active=True)
+    for user in users:
+        if user.last_login:
+            last_login_date = user.last_login.date()
+            time_delta = today - last_login_date
+            if time_delta.days > 30:
+                user.is_active = False
+                user.save()
